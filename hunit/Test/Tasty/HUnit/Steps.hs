@@ -26,7 +26,7 @@ instance IsTest TestCaseSteps where
         atomicModifyIORef ref (\l -> ((tme,msg):l, ()))
 
     hunitResult <- (Right <$> assertionFn stepFn) `catches`
-      [ Handler (\(HUnitFailure mbloc errMsg) -> return $ Left (prependLocation mbloc errMsg))
+      [ Handler (\(HUnitFailure cs errMsg) -> return $ Left (prependCallStack cs errMsg))
       , Handler (\(SomeException ex)          -> return $ Left (show ex))
       ]
 
